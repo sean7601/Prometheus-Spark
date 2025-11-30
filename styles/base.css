@@ -1,0 +1,222 @@
+:root {
+    --bg-deep: #050505;
+    --bg-panel: #0f0f13;
+    --bg-border: #2a2a35;
+    --text-main: #e0e0e0;
+    --text-muted: #888899;
+    --accent: #00ff9d;
+    --accent-glow: rgba(0, 255, 157, 0.2);
+    --secondary: #bd00ff;
+    --error: #ff3366;
+    --font-mono: 'Courier New', monospace;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg-deep);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.brand {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.prose p {
+    line-height: 1.6;
+    color: #ccc;
+    margin-bottom: 15px;
+    font-size: 1.05rem;
+}
+
+.prose ul {
+    padding-left: 20px;
+    color: #bbb;
+    line-height: 1.5;
+}
+
+.prose li {
+    margin-bottom: 8px;
+}
+
+.prose strong {
+    color: #fff;
+}
+
+.prose h3 {
+    color: var(--accent);
+    margin-top: 25px;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    font-size: 1rem;
+}
+
+.lesson-badge {
+    display: inline-block;
+    background: var(--secondary);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-family: var(--font-mono);
+}
+
+/* Summary Styles */
+.summary-list {
+    margin-top: 20px;
+    border-top: 1px solid #333;
+}
+
+.summary-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #222;
+}
+
+.summary-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.summary-num {
+    color: #666;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+}
+
+.summary-badge {
+    background: #333;
+    color: #ccc;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+}
+
+.summary-title {
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+        color: black;
+        height: auto;
+        overflow: visible;
+        display: block;
+    }
+
+    .mission-control {
+        width: 100%;
+        height: auto;
+        border: none;
+        box-shadow: none;
+        display: block;
+        background: white;
+    }
+
+    .guide-panel {
+        width: 100%;
+        height: auto;
+        border: none;
+        background: white;
+        overflow: visible;
+    }
+
+    .guide-content {
+        padding: 0;
+        overflow: visible;
+    }
+
+    .guide-header {
+        display: block !important;
+        background: none;
+        border-bottom: 2px solid #000;
+        padding: 10px 0;
+        margin-bottom: 20px;
+    }
+
+    .guide-header h1 {
+        color: black;
+        font-size: 1.4rem;
+    }
+
+    .brand {
+        color: #333;
+    }
+
+    .guide-footer,
+    .ai-link-container,
+    .workbench-panel,
+    .nav-btn,
+    .inline-btn,
+    .prompt-container,
+    .quiz-container,
+    .progress-container {
+        display: none !important;
+    }
+
+    .prose p, .prose ul, .prose li {
+        color: black;
+    }
+
+    .prose strong {
+        color: black;
+    }
+
+    .prose h3 {
+        color: #333;
+    }
+
+    .lesson-badge {
+        background: #333;
+        color: white;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+
+    .summary-item {
+        border-bottom: 1px solid #ccc;
+    }
+
+    .summary-title {
+        color: black;
+    }
+
+    .summary-badge {
+        background: #eee;
+        color: #000;
+        border: 1px solid #ccc;
+    }
+    
+    .summary-num {
+        color: #555;
+    }
+}

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prometheus Spark</title>
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+
+<div class="mission-control hide-workbench" id="app-container">
+    
+    <!-- LEFT SIDE: The Guide -->
+    <div class="guide-panel">
+        <div class="guide-header">
+            <div class="brand">Prometheus Spark</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <h1 id="step-title">Mission Briefing</h1>
+        </div>
+
+        <div class="ai-link-container" id="ai-link-container">
+            <a href="https://aistudio.google.com/prompts/new_chat" target="_blank" class="ai-link-btn">
+                <span>↗ LAUNCH AI STUDIO</span>
+            </a>
+        </div>
+
+        <div class="guide-content" id="scroll-container">
+            <div id="step-content" class="prose"></div>
+            <!-- Quiz Container Injected Here -->
+            <div id="quiz-area"></div>
+        </div>
+
+        <div class="guide-footer">
+            <button class="nav-btn" id="btn-back">Back</button>
+            <div style="font-size: 0.8rem; color: #555;">Module <span id="step-num">1</span>/<span id="total-steps"></span></div>
+            <button class="nav-btn primary" id="btn-next">Start</button>
+        </div>
+    </div>
+
+    <!-- RIGHT SIDE: The Workbench -->
+    <div class="workbench-panel">
+        <div class="tabs">
+            <div class="tab active" id="tab-code" data-tab="code">STAGING_AREA (Paste Code)</div>
+            <div class="tab" id="tab-preview" data-tab="preview">LIVE_PREVIEW</div>
+            <div class="action-area">
+                <button class="nav-btn" id="btn-run-code" style="padding: 5px 10px; font-size: 0.7rem;">▶ RUN CODE</button>
+            </div>
+        </div>
+
+        <div class="editor-container active" id="view-code">
+            <textarea id="code-editor" spellcheck="false" placeholder="<!-- 
+1. Copy the prompt from the left.
+2. Paste it into AI Studio.
+3. Copy the code the AI gives you (starting at &lt;!DOCTYPE html&gt;).
+4. Paste the code right here.
+5. Click 'RUN CODE' above.
+-->"></textarea>
+        </div>
+
+        <div class="editor-container" id="view-preview">
+            <!-- Iframe injected via JS -->
+        </div>
+    </div>
+
+</div>
+
+<script src="scripts/data/steps.js"></script>
+<script src="scripts/state/appState.js"></script>
+<script src="scripts/ui/domRefs.js"></script>
+<script src="scripts/ui/prompts.js"></script>
+<script src="scripts/ui/quiz.js"></script>
+<script src="scripts/ui/downloads.js"></script>
+<script src="scripts/ui/workbench.js"></script>
+<script src="scripts/ui/renderStep.js"></script>
+<script src="scripts/ui/navigation.js"></script>
+<script src="scripts/main.js"></script>
+</body>
+</html>
