@@ -16,6 +16,11 @@
     <div class="guide-panel">
         <div class="guide-header">
             <div class="brand">Prometheus Spark</div>
+            <div class="app-indicator" id="app-indicator" style="display: none;">
+                <span class="app-indicator-icon" id="app-indicator-icon"></span>
+                <span class="app-indicator-name" id="app-indicator-name"></span>
+                <button class="app-change-btn" id="app-change-btn" title="Change project">✕</button>
+            </div>
             <div class="progress-container">
                 <div class="progress-bar" id="progress-bar"></div>
             </div>
@@ -68,6 +73,7 @@
 
 </div>
 
+<script src="scripts/data/appChoices.js"></script>
 <script src="scripts/data/steps.js"></script>
 <script src="scripts/state/appState.js"></script>
 <script src="scripts/ui/domRefs.js"></script>

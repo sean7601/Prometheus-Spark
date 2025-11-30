@@ -1,5 +1,4 @@
 (function(ns) {
-    const { steps, appState, dom } = ns;
     const { attachPromptCopyHandler } = ns.prompts;
     const { wireQuizButtons } = ns.quiz;
     const { wireInlineActionButtons } = ns.downloads;
@@ -45,7 +44,7 @@
             tips: [
                 "<strong>2-Part Debug Prompt:</strong>",
                 "<strong>Part 1 — What doesn't work:</strong> 'I clicked [X] and expected [Y], but [Z] happened instead.'" ,
-                "<strong>Part 2 — What the console says:</strong> Paste the exact red error (e.g., 'Uncaught ReferenceError: addSailor is not defined').",
+                "<strong>Part 2 — What the console says:</strong> Paste the exact red error (e.g., 'Uncaught ReferenceError: addItem is not defined').",
                 "Always reproduce the bug first, then immediately copy the fresh Console error."
             ]
         },
@@ -67,7 +66,7 @@
             section: "5. UX Basics for Tools",
             icon: "🎨",
             keyPoints: [
-                "<strong>Group related things:</strong> Roster on left, calendar on right",
+                "<strong>Group related things:</strong> Data on left, views on right",
                 "<strong>Visual hierarchy:</strong> Use headings, spacing, and borders",
                 "<strong>Consistent styling:</strong> One theme, same fonts and button styles"
             ],
@@ -82,7 +81,7 @@
             icon: "📊",
             keyPoints: [
                 "CSV = Comma-Separated Values (plain text, rows and columns)",
-                "Import rosters from spreadsheets instead of retyping",
+                "Import data from spreadsheets instead of retyping",
                 "Safely ignore extra columns beyond what you need"
             ],
             tips: [
@@ -100,7 +99,7 @@
                 "The AI translates your rules into code logic"
             ],
             tips: [
-                "Example rules: 'No back-to-back watches,' 'Distribute evenly'",
+                "Example rules: 'Distribute evenly,' 'Respect constraints'",
                 "If the algorithm violates a rule, send a follow-up prompt",
                 "Treat logic bugs like syntax errors—describe and fix"
             ]
@@ -130,7 +129,7 @@
             tips: [
                 "CSS bars: Quick, lightweight—great for progress/workload bars",
                 "Libraries: Better for pie, line, scatter, or interactive charts",
-                "Visualizations turn data into insights (e.g., 'Smith has 2x the work')"
+                "Visualizations turn data into insights at a glance"
             ]
         }
     ];
@@ -228,6 +227,7 @@
     }
 
     function toggleWorkbench(step) {
+        const { steps, appState, dom } = ns;
         const isReadingStep = (step.type === 'lesson' || step.type === 'quiz') && (appState.currentStep !== steps.length - 1);
         if (isReadingStep) {
             dom.appContainer.classList.add('hide-workbench');
@@ -249,6 +249,7 @@
     }
 
     function renderSummary() {
+        const { steps } = ns;
         const container = document.getElementById('summary-list');
         if (!container) return;
 
@@ -261,9 +262,11 @@
             const item = document.createElement('div');
             item.className = 'summary-item';
             
+            // Handle function text
+            const textContent = typeof s.text === 'function' ? s.text() : s.text;
             let badge = '';
-            if (s.text.includes('class="lesson-badge"')) {
-                const match = s.text.match(/<span class="lesson-badge">([^<]+)<\/span>/);
+            if (textContent.includes('class="lesson-badge"')) {
+                const match = textContent.match(/<span class="lesson-badge">([^<]+)<\/span>/);
                 if (match) badge = match[1];
             }
 
@@ -280,18 +283,121 @@
         container.appendChild(list);
     }
 
+    // Build and show app selection modal
+    function showAppSelector() {
+        const { appChoices, dom } = ns;
+        
+        // Create modal overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'app-selector-overlay';
+        overlay.id = 'app-selector-overlay';
+        
+        const modal = document.createElement('div');
+        modal.className = 'app-selector-modal';
+        
+        modal.innerHTML = `
+            <h2>Choose Your Project</h2>
+            <p>Select which app you'd like to build during this course. All lessons will be customized for your choice.</p>
+            <div class="app-choices">
+                ${Object.values(appChoices).map(app => `
+                    <button class="app-choice-btn" data-app="${app.id}">
+                        <span class="app-choice-icon">${app.icon}</span>
+                        <span class="app-choice-name">${app.name}</span>
+                        <span class="app-choice-desc">${app.description}</span>
+                    </button>
+                `).join('')}
+            </div>
+        `;
+        
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+        
+        // Wire up choice buttons
+        modal.querySelectorAll('.app-choice-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const appId = btn.dataset.app;
+                ns.selectApp(appId);
+                overlay.remove();
+                // Rebuild and render
+                ns.steps = ns.buildSteps();
+                dom.totalSteps.innerText = ns.steps.length;
+                renderStep();
+            });
+        });
+    }
+
+    // Update app indicator in header
+    function updateAppIndicator() {
+        const { appState, appChoices } = ns;
+        const indicator = document.getElementById('app-indicator');
+        const iconEl = document.getElementById('app-indicator-icon');
+        const nameEl = document.getElementById('app-indicator-name');
+        const changeBtn = document.getElementById('app-change-btn');
+        
+        if (!indicator || !appState.selectedApp) {
+            if (indicator) indicator.style.display = 'none';
+            return;
+        }
+        
+        const choice = appChoices[appState.selectedApp];
+        if (!choice) {
+            indicator.style.display = 'none';
+            return;
+        }
+        
+        indicator.style.display = 'flex';
+        iconEl.textContent = choice.icon;
+        nameEl.textContent = `Building: ${choice.name}`;
+        
+        // Wire up change button (only once)
+        if (!changeBtn.dataset.wired) {
+            changeBtn.dataset.wired = 'true';
+            changeBtn.addEventListener('click', () => {
+                if (confirm('This will reset your progress and let you choose a different project. Continue?')) {
+                    ns.resetProgress();
+                    location.reload();
+                }
+            });
+        }
+    }
+
     function renderStep() {
-        const step = steps[appState.currentStep];
+        const { steps, appState, dom } = ns;
+        
+        // Update app indicator
+        updateAppIndicator();
+        
+        // If no app selected and at step 0, show selector
+        if (!appState.selectedApp && appState.currentStep === 0) {
+            showAppSelector();
+            return;
+        }
+        
+        // Ensure steps are built
+        if (!steps || steps.length === 0) {
+            ns.steps = ns.buildSteps();
+        }
+        
+        const step = ns.steps[appState.currentStep];
+        if (!step) return;
+        
         toggleWorkbench(step);
 
         dom.stepTitle.innerText = step.title;
         dom.stepNum.innerText = appState.currentStep + 1;
-        dom.stepContent.innerHTML = step.text;
+        
+        // Handle dynamic text content (functions)
+        const textContent = typeof step.text === 'function' ? step.text() : step.text;
+        dom.stepContent.innerHTML = textContent;
         dom.quizArea.innerHTML = '';
 
+        // Handle dynamic prompt content (functions)
         if (step.prompt) {
-            const promptBox = buildPromptBox(step.prompt);
-            dom.stepContent.appendChild(promptBox);
+            const promptText = typeof step.prompt === 'function' ? step.prompt() : step.prompt;
+            if (promptText) {
+                const promptBox = buildPromptBox(promptText);
+                dom.stepContent.appendChild(promptBox);
+            }
         }
 
         if (step.type === 'quiz' && Array.isArray(step.questions)) {
@@ -309,7 +415,7 @@
         }
 
         dom.backButton.style.visibility = appState.currentStep === 0 ? 'hidden' : 'visible';
-        dom.nextButton.innerText = appState.currentStep === steps.length - 1 ? 'Finish' : 'Next Step';
+        dom.nextButton.innerText = appState.currentStep === ns.steps.length - 1 ? 'Finish' : 'Next Step';
         dom.scrollContainer.scrollTop = 0;
 
         wireQuizButtons(dom.quizArea);
@@ -317,4 +423,5 @@
     }
 
     ns.renderStep = renderStep;
+    ns.showAppSelector = showAppSelector;
 })(window.vibeApp = window.vibeApp || {});

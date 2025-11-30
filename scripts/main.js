@@ -1,12 +1,20 @@
 (function(ns) {
 	function boot() {
-		const { steps, dom, renderStep, navigation, workbench, appState } = ns;
-		if (!steps || !dom || !renderStep) {
+		const { dom, renderStep, navigation, workbench, appState, buildSteps } = ns;
+		if (!dom || !renderStep) {
 			console.error('Prometheus Spark: missing core modules.');
 			return;
 		}
 
-		dom.totalSteps.innerText = steps.length;
+		// Build steps based on selected app (or with defaults if none selected yet)
+		if (appState.selectedApp) {
+			ns.steps = buildSteps();
+		}
+		
+		// Update total steps count
+		if (ns.steps && ns.steps.length > 0) {
+			dom.totalSteps.innerText = ns.steps.length;
+		}
 		
 		// Restore saved code editor content
 		if (appState?.savedCodeEditor && dom.codeEditor) {

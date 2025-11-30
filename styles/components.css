@@ -385,3 +385,121 @@
         color: #000;
     }
 }
+
+/* App Selector Modal */
+.app-selector-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.app-selector-modal {
+    background: #1a1a20;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 40px;
+    max-width: 800px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.4s ease;
+}
+
+.app-selector-modal h2 {
+    color: var(--accent);
+    margin: 0 0 10px 0;
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+.app-selector-modal > p {
+    color: #aaa;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1rem;
+}
+
+.app-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.app-choice-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 25px;
+    background: #0f0f13;
+    border: 2px solid #333;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.app-choice-btn:hover {
+    border-color: var(--accent);
+    background: #15151a;
+    transform: translateX(5px);
+}
+
+.app-choice-btn:hover .app-choice-icon {
+    transform: scale(1.2);
+}
+
+.app-choice-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    transition: transform 0.3s ease;
+}
+
+.app-choice-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.app-choice-desc {
+    font-size: 0.9rem;
+    color: #888;
+    line-height: 1.4;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 600px) {
+    .app-selector-modal {
+        padding: 25px;
+    }
+    
+    .app-selector-modal h2 {
+        font-size: 1.4rem;
+    }
+    
+    .app-choice-btn {
+        padding: 15px 20px;
+    }
+    
+    .app-choice-name {
+        font-size: 1.1rem;
+    }
+}

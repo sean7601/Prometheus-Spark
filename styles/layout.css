@@ -44,6 +44,43 @@
     background: linear-gradient(90deg, rgba(0, 255, 157, 0.05) 0%, transparent 100%);
 }
 
+.app-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #333;
+    border-radius: 6px;
+    margin-top: 10px;
+    font-size: 0.85rem;
+}
+
+.app-indicator-icon {
+    font-size: 1.2rem;
+}
+
+.app-indicator-name {
+    color: #ccc;
+    flex: 1;
+}
+
+.app-change-btn {
+    background: transparent;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 2px 6px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.app-change-btn:hover {
+    color: var(--error);
+    background: rgba(255, 51, 102, 0.1);
+}
+
 .progress-container {
     width: 100%;
     height: 4px;
