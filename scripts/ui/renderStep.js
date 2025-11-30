@@ -321,6 +321,7 @@
                 // Rebuild and render
                 ns.steps = ns.buildSteps();
                 dom.totalSteps.innerText = ns.steps.length;
+                ns.navigation?.buildProgressSegments?.();
                 renderStep();
             });
         });
@@ -376,6 +377,7 @@
         // Ensure steps are built
         if (!steps || steps.length === 0) {
             ns.steps = ns.buildSteps();
+            ns.navigation?.buildProgressSegments?.();
         }
         
         const step = ns.steps[appState.currentStep];
